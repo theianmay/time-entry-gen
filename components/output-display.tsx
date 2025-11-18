@@ -33,7 +33,7 @@ export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDis
   };
 
   return (
-    <Card className="border-2">
+    <Card className="border-2 animate-in fade-in-50 slide-in-from-bottom-4 duration-300">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -80,6 +80,7 @@ export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDis
             variant="default"
             className="flex-1"
             disabled={copied}
+            aria-label="Copy billing narrative to clipboard"
           >
             {copied ? (
               <>
@@ -93,7 +94,11 @@ export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDis
               </>
             )}
           </Button>
-          <Button onClick={onClear} variant="outline">
+          <Button 
+            onClick={onClear} 
+            variant="outline"
+            aria-label="Clear output and generate new entry"
+          >
             Generate New Entry
           </Button>
         </div>

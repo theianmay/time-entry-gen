@@ -6,6 +6,7 @@
 import { generateBillingNarrative, validateApiKey } from './openai-client';
 import { applyDeterministicRules } from './fallback-transformer';
 import { GenerationResult } from '@/types';
+import { getRateLimiter, formatResetTime } from './rate-limiter';
 
 export interface TransformOptions {
   activity: string;
@@ -21,6 +22,25 @@ export async function generateWithFallback(
   options: TransformOptions
 ): Promise<GenerationResult> {
   const { activity, subject, goal } = options;
+
+  // Check rate limits
+  const rateLimiter = getRateLimiter();
+  const rateLimitCheck = rateLimiter.canMakeRequest();
+  
+  if (!rateLimitCheck.allowed) {
+    const resetTime = rateLimitCheck.resetIn 
+      ? formatResetTime(rateLimitCheck.resetIn)
+      : 'soon';
+    
+    console.warn(`Rate limit exceeded: ${rateLimitCheck.reason}. Try again in ${resetTime}.`);
+    
+    // Use fallback mode when rate limited
+    const output = applyDeterministicRules(activity, subject, goal);
+    return {
+      output,
+      method: 'fallback',
+    };
+  }
 
   // Check if API key is configured
   if (!validateApiKey()) {
@@ -39,6 +59,9 @@ export async function generateWithFallback(
       subject,
       goal,
     });
+
+    // Log successful request for rate limiting
+    rateLimiter.logRequest(650); // Estimated tokens per request
 
     return {
       output,
@@ -109,4 +132,20 @@ export function formatOutput(output: string): string {
 
   // Otherwise return the single narrative
   return output;
+}
+
+/**
+ * Get current API usage statistics
+ */
+export function getUsageStatistics() {
+  const rateLimiter = getRateLimiter();
+  return rateLimiter.getUsageStats();
+}
+
+/**
+ * Reset rate limits (for testing or manual reset)
+ */
+export function resetRateLimits() {
+  const rateLimiter = getRateLimiter();
+  rateLimiter.reset();
 }
