@@ -55,7 +55,7 @@ export default function Home() {
               <FileText className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold">Legal Billing Generator</h1>
+              <h1 className="text-xl font-bold">TimeCraft</h1>
               <p className="text-sm text-muted-foreground">
                 Transform time entries into compliant narratives
               </p>

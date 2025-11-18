@@ -91,6 +91,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                   <FormControl>
                     <Input
                       placeholder='e.g., "Founder", "Series A Term Sheet", "Co-counsel"'
+                      autoComplete="off"
                       {...field}
                     />
                   </FormControl>
@@ -115,6 +116,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                       placeholder='e.g., "discuss funding structure", "identify control provisions"'
                       className="resize-none"
                       rows={3}
+                      autoComplete="off"
                       {...field}
                     />
                   </FormControl>
