@@ -105,18 +105,38 @@ Complete history of transformations and edits for compliance and training.
 
 ## Technical Debt & Infrastructure
 
+### Automated Testing
+
+**Description:**  
+Add comprehensive test coverage for reliability and confidence during refactoring.
+
+**Recommended Stack:**
+- **Vitest + React Testing Library**: Unit and component tests
+- **Playwright**: End-to-end tests for critical user flows
+
+**Test Coverage:**
+- Component tests (ActivitySelector, EntryForm, OutputDisplay, SessionHistory)
+- Integration tests (form submission, API integration, fallback logic)
+- E2E tests (happy path, fallback mode, session history)
+- API mocking for consistent test results
+
+**Priority:** Medium (add when team grows or before major refactoring)
+
 ### Performance Optimization
 - Caching for common transformations
 - Faster LLM response times
 - Offline mode support
+- Bundle size optimization
+- Image optimization (if added)
 
 ### Security Enhancements
 - End-to-end encryption
 - Role-based access control
 - SOC 2 compliance
 - Client matter isolation
+- Move API key to server-side (Vercel Edge Functions)
 
 ---
 
-*Last Updated: [Date]*  
+*Last Updated: Phase 4 Complete*  
 *Priority ranking to be determined based on user feedback and business needs.*
