@@ -1,8 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TimeCraft
+
+**Legal Billing Made Easy** - Helping legal professionals craft polished billing descriptions in seconds.
+
+TimeCraft is a Next.js application that transforms raw time entries into professional billing narratives using AI. Every output follows the "Golden Formula": ActionVerb + SpecificTask + Context/Reason (Value).
+
+## Features
+
+- 🤖 AI-powered narrative generation using OpenAI GPT-4o-mini
+- 🔄 Automatic fallback to rule-based transformation
+- 🎨 Beautiful, responsive UI with dark mode
+- ✅ Form validation with progressive disclosure
+- 📋 Copy to clipboard functionality
+- ⚡ Real-time generation with loading states
 
 ## Getting Started
 
-First, run the development server:
+First, set up your environment variables:
+
+```bash
+cp .env.example .env.local
+# Add your OpenAI API key to .env.local
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
