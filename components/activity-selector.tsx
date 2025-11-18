@@ -31,6 +31,16 @@ export function ActivitySelector({ value, onChange }: ActivitySelectorProps) {
                 isSelected && 'border-primary bg-primary/5 shadow-md'
               )}
               onClick={() => onChange(activity.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onChange(activity.id);
+                }
+              }}
+              tabIndex={0}
+              role="button"
+              aria-pressed={isSelected}
+              aria-label={`Select ${activity.label}: ${activity.description}`}
             >
               <div
                 className={cn(

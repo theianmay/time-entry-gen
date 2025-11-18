@@ -109,6 +109,7 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
                       size="sm"
                       onClick={() => handleCopy(entry)}
                       className="h-8 w-8 p-0"
+                      aria-label={isCopied ? "Copied" : "Copy to clipboard"}
                     >
                       <Copy className={cn(
                         "h-3.5 w-3.5",
@@ -120,6 +121,8 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
                       size="sm"
                       onClick={() => toggleExpand(entry.id)}
                       className="h-8 w-8 p-0"
+                      aria-label={isExpanded ? "Collapse details" : "Expand details"}
+                      aria-expanded={isExpanded}
                     >
                       {isExpanded ? (
                         <ChevronUp className="h-3.5 w-3.5" />

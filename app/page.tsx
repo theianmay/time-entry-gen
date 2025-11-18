@@ -82,7 +82,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8 max-w-4xl">
+      <main className="container mx-auto px-4 py-8 max-w-4xl" role="main">
         <div className="space-y-8">
           {/* Form Section */}
           <section>
