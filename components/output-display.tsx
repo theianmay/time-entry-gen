@@ -8,16 +8,23 @@ import { cn } from '@/lib/utils';
 
 interface OutputDisplayProps {
   output: string;
+  time?: number;
   usedFallback: boolean;
   onClear: () => void;
 }
 
-export function OutputDisplay({ output, usedFallback, onClear }: OutputDisplayProps) {
+export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDisplayProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(output);
+      // Build the full text to copy including time if present
+      let textToCopy = output;
+      if (time) {
+        textToCopy += `\n\nTime: ${time} hours (${Math.round(time * 60)} minutes)`;
+      }
+      
+      await navigator.clipboard.writeText(textToCopy);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -56,6 +63,16 @@ export function OutputDisplay({ output, usedFallback, onClear }: OutputDisplayPr
         <div className="bg-muted rounded-lg p-4 font-mono text-sm leading-relaxed">
           {output}
         </div>
+
+        {time && (
+          <div className="flex items-center gap-2 text-sm">
+            <span className="font-medium text-muted-foreground">Time:</span>
+            <span className="font-semibold">{time} hours</span>
+            <span className="text-muted-foreground">
+              ({Math.round(time * 60)} minutes)
+            </span>
+          </div>
+        )}
 
         <div className="flex gap-2">
           <Button

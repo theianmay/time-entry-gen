@@ -9,6 +9,7 @@ import { FileText } from 'lucide-react';
 
 export default function Home() {
   const [output, setOutput] = useState<string | null>(null);
+  const [time, setTime] = useState<number | undefined>(undefined);
   const [isGenerating, setIsGenerating] = useState(false);
   const [usedFallback, setUsedFallback] = useState(false);
 
@@ -23,6 +24,7 @@ export default function Home() {
       
       const mockOutput = `Telephone conference with ${data.subject} regarding ${data.goal} to determine next steps and strategic approach.`;
       setOutput(mockOutput);
+      setTime(data.time);
     } catch (error) {
       console.error('Generation failed:', error);
     } finally {
@@ -32,6 +34,7 @@ export default function Home() {
 
   const handleClear = () => {
     setOutput(null);
+    setTime(undefined);
     setUsedFallback(false);
   };
 
@@ -68,6 +71,7 @@ export default function Home() {
             <section>
               <OutputDisplay
                 output={output}
+                time={time}
                 usedFallback={usedFallback}
                 onClear={handleClear}
               />

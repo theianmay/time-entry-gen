@@ -14,20 +14,20 @@
 
 ### Phase 0: Project Setup & Foundation
 **Timeline:** 1-2 days  
-**Status:** Not Started
+**Status:** ✅ Complete
 
 #### Tasks
 
-- [ ] **Initialize Next.js Project**
+- [x] **Initialize Next.js Project**
   ```bash
   npx create-next-app@latest time-entry-gen --typescript --tailwind --app
   ```
-  - Use App Router
-  - Enable TypeScript
-  - Enable TailwindCSS
-  - Enable ESLint
+  - ✅ Use App Router
+  - ✅ Enable TypeScript
+  - ✅ Enable TailwindCSS
+  - ✅ Enable ESLint
 
-- [ ] **Install Core Dependencies**
+- [x] **Install Core Dependencies**
   ```bash
   npm install react-hook-form @hookform/resolvers zod
   npm install openai
@@ -35,23 +35,23 @@
   npm install lucide-react
   ```
 
-- [ ] **Setup shadcn/ui**
+- [x] **Setup shadcn/ui**
   ```bash
-  npx shadcn-ui@latest init
-  npx shadcn-ui@latest add button card input textarea label form
+  npx shadcn@latest init
+  npx shadcn@latest add button card input textarea label form select
   ```
 
-- [ ] **Configure Environment Variables**
-  - Create `.env.local` with `NEXT_PUBLIC_OPENAI_API_KEY`
-  - Add `.env.local` to `.gitignore`
+- [x] **Configure Environment Variables**
+  - ✅ Create `.env.local` with `NEXT_PUBLIC_OPENAI_API_KEY`
+  - ✅ Create `.env.example` template
+  - ✅ `.env.local` in `.gitignore`
 
-- [ ] **Setup Git Repository**
-  - Initialize Git repo
-  - Create `.gitignore`
-  - Initial commit
-  - Push to GitHub
+- [x] **Setup Git Repository**
+  - ✅ Initialize Git repo
+  - ✅ Create `.gitignore`
+  - ✅ Initial commit
 
-- [ ] **Configure Vercel Project**
+- [ ] **Configure Vercel Project** *(Deferred to later stage)*
   - Link GitHub repo to Vercel
   - Add environment variable in Vercel dashboard
   - Test initial deployment
@@ -59,59 +59,72 @@
 **Deliverables:**
 - ✅ Working Next.js app running on `localhost:3000`
 - ✅ shadcn/ui components available
-- ✅ Connected to Vercel for auto-deployment
+- ✅ All dependencies installed
+- ✅ Environment variables configured
+- ⏸️ Vercel deployment (deferred)
 
 ---
 
 ### Phase 1: Core UI & Layout
 **Timeline:** 2-3 days  
-**Status:** Not Started
+**Status:** ✅ Complete
 
 #### Tasks
 
-- [ ] **Create Base Layout**
-  - Update `app/layout.tsx` with ThemeProvider
-  - Add global styles in `app/globals.css`
-  - Create main container with max-width centering
+- [x] **Create Base Layout**
+  - ✅ Update `app/layout.tsx` with ThemeProvider
+  - ✅ Add global styles in `app/globals.css` (shadcn configured)
+  - ✅ Create main container with max-width centering
+  - ✅ Update metadata (title, description)
 
-- [ ] **Implement Theme Toggle**
-  - Create `components/theme-toggle.tsx`
-  - Add sun/moon icons (Lucide)
-  - Position in top-right corner
-  - Test light/dark mode switching
+- [x] **Implement Theme Toggle**
+  - ✅ Create `components/theme-toggle.tsx`
+  - ✅ Add sun/moon icons (Lucide)
+  - ✅ Position in top-right corner
+  - ✅ Test light/dark mode switching
 
-- [ ] **Build Activity Selection Component**
-  - Create `components/activity-selector.tsx`
-  - Design card/button layout for activities
-  - Activities: Call, Document Review, Drafting, Research, Email, Meeting, Analysis
-  - Implement selection state (active styling)
-  - Make responsive (grid layout)
+- [x] **Build Activity Selection Component**
+  - ✅ Create `components/activity-selector.tsx`
+  - ✅ Design card/button layout for activities
+  - ✅ Activities: Call, Document Review, Drafting, Research, Email, Meeting, Analysis
+  - ✅ Implement selection state (active styling)
+  - ✅ Make responsive (grid layout)
+  - ✅ Add icons for each activity type
 
-- [ ] **Create Form Component Structure**
-  - Create `components/entry-form.tsx`
-  - Setup React Hook Form with Zod schema
-  - Add form fields: activity, subject, goal, time
-  - Implement progressive disclosure (subject appears after activity)
+- [x] **Create Form Component Structure**
+  - ✅ Create `components/entry-form.tsx`
+  - ✅ Setup React Hook Form with Zod schema
+  - ✅ Add form fields: activity, subject, goal, time
+  - ✅ Implement progressive disclosure (subject appears after activity)
 
-- [ ] **Style Form Components**
-  - Use shadcn/ui Input, Textarea, Label
-  - Add placeholder text and help text
-  - Style validation errors
-  - Add loading states
+- [x] **Style Form Components**
+  - ✅ Use shadcn/ui Input, Textarea, Label
+  - ✅ Add placeholder text and help text
+  - ✅ Style validation errors
+  - ✅ Add loading states
+  - ✅ Time input with 0.1 hour increments
 
-- [ ] **Create Output Display Component**
-  - Create `components/output-display.tsx`
-  - Design output card layout
-  - Add "Copy to Clipboard" button
-  - Add "Generate New Entry" button
-  - Show fallback mode indicator
+- [x] **Create Output Display Component**
+  - ✅ Create `components/output-display.tsx`
+  - ✅ Design output card layout
+  - ✅ Add "Copy to Clipboard" button
+  - ✅ Add "Generate New Entry" button
+  - ✅ Show fallback mode indicator
+
+- [x] **Create Supporting Files**
+  - ✅ `types/index.ts` - TypeScript type definitions
+  - ✅ `lib/constants.ts` - Activity definitions and vocabulary mappings
+  - ✅ `app/page.tsx` - Main application page with state management
 
 **Deliverables:**
 - ✅ Fully styled, responsive UI
 - ✅ Activity selection working
 - ✅ Progressive disclosure functioning
 - ✅ Theme toggle working
-- ⚠️ No API integration yet (mock data)
+- ✅ Form validation with Zod
+- ✅ Mock generation (1.5s delay)
+- ✅ Copy to clipboard functionality
+- ⚠️ No API integration yet (Phase 2)
 
 ---
 
