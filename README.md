@@ -256,7 +256,7 @@ See LICENSE file.
 
 ## 📧 Support
 
-For issues or questions, please open an issue on GitHub.
+For issues or questions, please open an issue on GitHub or reach out via email.
 
 ---
 
