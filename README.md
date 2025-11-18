@@ -1,8 +1,8 @@
 # TimeCraft
 
-**Legal Billing Narrative Generator** - Transform attorney time entries into compliant, value-driven billing narratives using AI.
+**Legal Billing Made Easy** - Helping legal professionals craft polished billing descriptions in seconds.
 
-TimeCraft is a Next.js application that helps legal professionals convert raw time entries into polished billing narratives that follow the "Golden Formula": ActionVerb + SpecificTask + Context/Reason (Value).
+TimeCraft is a Next.js application that transforms raw time entries into professional billing narratives using AI. Every output follows the "Golden Formula": ActionVerb + SpecificTask + Context/Reason (Value).
 
 ## Features
 

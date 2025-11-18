@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TimeCraft - Legal Billing Narrative Generator",
-  description: "Transform attorney time entries into compliant, value-driven billing narratives using AI",
+  title: "TimeCraft - Legal Billing Made Easy",
+  description: "Helping legal professionals craft polished billing descriptions in seconds. Transform time entries into professional narratives with AI.",
 };
 
 export default function RootLayout({

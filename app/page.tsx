@@ -57,7 +57,7 @@ export default function Home() {
             <div>
               <h1 className="text-xl font-bold">TimeCraft</h1>
               <p className="text-sm text-muted-foreground">
-                Transform time entries into compliant narratives
+                Helping legal professionals craft polished billing descriptions in seconds
               </p>
             </div>
           </div>
