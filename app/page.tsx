@@ -6,6 +6,7 @@ import { OutputDisplay } from '@/components/output-display';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { FormData } from '@/types';
 import { FileText } from 'lucide-react';
+import { generateWithFallback } from '@/lib/transformation-engine';
 
 export default function Home() {
   const [output, setOutput] = useState<string | null>(null);
@@ -18,15 +19,21 @@ export default function Home() {
     setUsedFallback(false);
 
     try {
-      // TODO: Implement API call in Phase 2
-      // For now, mock output
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
-      const mockOutput = `Telephone conference with ${data.subject} regarding ${data.goal} to determine next steps and strategic approach.`;
-      setOutput(mockOutput);
+      // Generate billing narrative using AI with fallback
+      const result = await generateWithFallback({
+        activity: data.activity,
+        subject: data.subject,
+        goal: data.goal,
+      });
+
+      setOutput(result.output);
       setTime(data.time);
+      setUsedFallback(result.method === 'fallback');
     } catch (error) {
       console.error('Generation failed:', error);
+      // Show error to user
+      setOutput('Error: Failed to generate narrative. Please try again.');
+      setUsedFallback(true);
     } finally {
       setIsGenerating(false);
     }

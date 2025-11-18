@@ -130,54 +130,60 @@
 
 ### Phase 2: API Integration & Core Logic
 **Timeline:** 3-4 days  
-**Status:** Not Started
+**Status:** ✅ Complete
 
 #### Tasks
 
-- [ ] **Create Type Definitions**
-  - Create `types/index.ts`
-  - Define `FormData`, `HistoryEntry`, `GenerationResult` types
-  - Export all types
+- [x] **Create Type Definitions**
+  - ✅ Create `types/index.ts`
+  - ✅ Define `FormData`, `HistoryEntry`, `GenerationResult` types
+  - ✅ Export all types
 
-- [ ] **Build Prompt Engineering System**
-  - Create `lib/prompt-builder.ts`
-  - Implement `buildSystemPrompt()` with all transformation rules
-  - Implement `buildUserPrompt(activity, subject, goal)`
-  - Document prompt structure
+- [x] **Build Prompt Engineering System**
+  - ✅ Create `lib/prompt-builder.ts`
+  - ✅ Implement `buildSystemPrompt()` with all transformation rules
+  - ✅ Implement `buildUserPrompt(activity, subject, goal)`
+  - ✅ Document prompt structure
+  - ✅ Add retry prompt builder
 
-- [ ] **Implement OpenAI Client**
-  - Create `lib/openai-client.ts`
-  - Initialize OpenAI SDK with API key
-  - Implement `generateBillingNarrative()` function
-  - Configure model: `gpt-4o-mini`
-  - Set temperature: 0.3
-  - Set max_tokens: 200
+- [x] **Implement OpenAI Client**
+  - ✅ Create `lib/openai-client.ts`
+  - ✅ Initialize OpenAI SDK with API key
+  - ✅ Implement `generateBillingNarrative()` function
+  - ✅ Configure model: `gpt-4o-mini`
+  - ✅ Set temperature: 0.3
+  - ✅ Set max_tokens: 300
+  - ✅ Add API key validation helpers
 
-- [ ] **Build Fallback Transformer**
-  - Create `lib/fallback-transformer.ts`
-  - Implement Rule A: Active voice conversion (regex-based)
-  - Implement Rule D: Vocabulary mapping (lookup table)
-  - Implement basic narrative construction
-  - Create `applyDeterministicRules()` function
+- [x] **Build Fallback Transformer**
+  - ✅ Create `lib/fallback-transformer.ts`
+  - ✅ Implement Rule A: Active voice conversion (regex-based)
+  - ✅ Implement Rule D: Vocabulary mapping (lookup table)
+  - ✅ Implement basic narrative construction
+  - ✅ Create `applyDeterministicRules()` function
+  - ✅ Add block billing detection
 
-- [ ] **Create Transformation Rules Module**
-  - Create `lib/transformation-rules.ts`
-  - Centralize vocabulary mappings
-  - Activity-to-verb mappings
-  - Export constants and helper functions
+- [x] **Create Transformation Rules Module**
+  - ✅ Already created in Phase 1: `lib/constants.ts`
+  - ✅ Centralize vocabulary mappings
+  - ✅ Activity-to-verb mappings
+  - ✅ Export constants and helper functions
 
-- [ ] **Implement Error Handling Wrapper**
-  - Create `generateWithFallback()` function
-  - Try OpenAI API first
-  - Catch errors and attempt fallback
-  - Return result with method indicator
-  - Add retry logic for transient failures
+- [x] **Implement Error Handling Wrapper**
+  - ✅ Create `lib/transformation-engine.ts`
+  - ✅ Create `generateWithFallback()` function
+  - ✅ Try OpenAI API first
+  - ✅ Catch errors and attempt fallback
+  - ✅ Return result with method indicator
+  - ✅ Add retry logic for transient failures (exponential backoff)
+  - ✅ Add output validation
 
-- [ ] **Integrate API with Form**
-  - Connect form submission to API call
-  - Show loading state during generation
-  - Display results in output component
-  - Handle errors gracefully
+- [x] **Integrate API with Form**
+  - ✅ Connect form submission to API call in `app/page.tsx`
+  - ✅ Show loading state during generation
+  - ✅ Display results in output component
+  - ✅ Handle errors gracefully
+  - ✅ Show fallback mode indicator
 
 **Deliverables:**
 - ✅ OpenAI API integration working
