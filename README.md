@@ -241,7 +241,7 @@ This is currently a solo MVP project. Future contributions welcome!
 
 ## 📝 License
 
-MIT License - feel free to use for personal or commercial projects.
+See LICENSE file.
 
 ---
 
