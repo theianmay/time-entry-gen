@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import { EntryForm } from '@/components/entry-form';
 import { OutputDisplay } from '@/components/output-display';
+import { SessionHistory } from '@/components/session-history';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { FormData } from '@/types';
+import { FormData, HistoryEntry } from '@/types';
 import { FileText } from 'lucide-react';
 import { generateWithFallback } from '@/lib/transformation-engine';
 
@@ -13,6 +14,7 @@ export default function Home() {
   const [time, setTime] = useState<number | undefined>(undefined);
   const [isGenerating, setIsGenerating] = useState(false);
   const [usedFallback, setUsedFallback] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   const handleGenerate = async (data: FormData) => {
     setIsGenerating(true);
@@ -29,6 +31,16 @@ export default function Home() {
       setOutput(result.output);
       setTime(data.time);
       setUsedFallback(result.method === 'fallback');
+
+      // Add to history
+      const historyEntry: HistoryEntry = {
+        id: crypto.randomUUID(),
+        timestamp: new Date(),
+        input: data,
+        output: result.output,
+        usedFallback: result.method === 'fallback',
+      };
+      setHistory((prev) => [historyEntry, ...prev]); // Newest first
     } catch (error) {
       console.error('Generation failed:', error);
       // Show error to user
@@ -43,6 +55,10 @@ export default function Home() {
     setOutput(null);
     setTime(undefined);
     setUsedFallback(false);
+  };
+
+  const handleClearHistory = () => {
+    setHistory([]);
   };
 
   return (
@@ -92,6 +108,13 @@ export default function Home() {
               <p className="text-xs">
                 All entries will follow the Golden Formula: ActionVerb + SpecificTask + Context/Reason
               </p>
+            </section>
+          )}
+
+          {/* Session History */}
+          {history.length > 0 && (
+            <section>
+              <SessionHistory history={history} onClear={handleClearHistory} />
             </section>
           )}
         </div>

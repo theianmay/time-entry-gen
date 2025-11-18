@@ -195,52 +195,56 @@
 
 ### Phase 3: Session History & UX Polish
 **Timeline:** 2-3 days  
-**Status:** Not Started
+**Status:** ✅ Complete
 
 #### Tasks
 
-- [ ] **Create Session History Component**
-  - Create `components/session-history.tsx`
-  - Design collapsible sidebar layout
-  - Show newest entries first
-  - Display timestamp, input summary, and output
-  - Add "Copy" button for each entry
-  - Implement expand/collapse for entry details
+- [x] **Create Session History Component**
+  - ✅ Create `components/session-history.tsx`
+  - ✅ Design collapsible card layout
+  - ✅ Show newest entries first
+  - ✅ Display timestamp, input summary, and output
+  - ✅ Add "Copy" button for each entry
+  - ✅ Implement expand/collapse for entry details
+  - ✅ Add "Clear All" button
+  - ✅ Show fallback indicator for entries
 
-- [ ] **Add State Management for History**
-  - Add `history` state to main page
-  - Implement `addToHistory()` function
-  - Store: id, timestamp, input, output
-  - Keep in component state (in-memory only)
+- [x] **Add State Management for History**
+  - ✅ Add `history` state to main page
+  - ✅ Add entries to history on successful generation
+  - ✅ Store: id, timestamp, input, output, usedFallback
+  - ✅ Keep in component state (in-memory only)
+  - ✅ Implement `handleClearHistory()` function
 
-- [ ] **Implement Copy to Clipboard**
-  - Use Clipboard API
-  - Add visual feedback (checkmark, "Copied!" toast)
-  - Handle clipboard permissions
-  - Fallback for older browsers
+- [x] **Implement Copy to Clipboard**
+  - ✅ Use Clipboard API
+  - ✅ Add visual feedback (icon color change)
+  - ✅ Include time duration in copied text
+  - ✅ Handle clipboard errors
 
-- [ ] **Add Form Reset After Generation**
-  - Clear form fields after successful generation
-  - Reset to initial state
-  - Keep activity selector visible
+- [x] **Add Form Reset After Generation**
+  - ✅ Clear form fields after successful generation (React Hook Form reset)
+  - ✅ Reset to initial state
+  - ✅ Activity selector clears
 
-- [ ] **Implement Loading States**
-  - Disable form during generation
-  - Show spinner on Generate button
-  - Display "Generating..." message
-  - Disable all inputs during processing
+- [x] **Implement Loading States**
+  - ✅ Disable form during generation
+  - ✅ Show spinner on Generate button
+  - ✅ Display "Generating..." message
+  - ✅ Form inputs disabled via isGenerating prop
 
-- [ ] **Add Validation Error Messages**
-  - Show field-level errors (red text)
-  - Highlight invalid fields
-  - Show error on empty required fields
-  - Format time field validation (0.1 increments)
+- [x] **Add Validation Error Messages**
+  - ✅ Show field-level errors (red text via FormMessage)
+  - ✅ Highlight invalid fields
+  - ✅ Show error on empty required fields (Zod validation)
+  - ✅ Format time field validation (0.1 increments)
+  - ✅ Disable autocomplete on subject/goal fields
 
-- [ ] **Mobile Responsive Design**
-  - Test on mobile viewport
-  - Stack history sidebar below on mobile
-  - Make activity cards responsive grid
-  - Ensure touch targets are adequate (44px min)
+- [x] **Mobile Responsive Design**
+  - ✅ Activity cards use responsive grid (2/3/4 columns)
+  - ✅ History component stacks properly on mobile
+  - ✅ Container max-width for readability
+  - ✅ Touch-friendly button sizes
 
 **Deliverables:**
 - ✅ Session history working
