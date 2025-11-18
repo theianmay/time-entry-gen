@@ -26,10 +26,63 @@ ActionVerb + SpecificTask + Context/Reason (Value)
 
 ## MVP User Flow
 
-1. **Activity Selection**: User selects predefined activity type (Call, Document Review, Drafting, etc.) via card/button interface
-2. **Goal Input**: User enters the goal/purpose in a free-text field
-3. **Time Entry** (Optional): User can specify time in 0.1-hour increments (6-minute billing blocks)
-4. **Generation**: System outputs compliant billing narrative(s)
+**Pattern:** Structured Three-Field with Progressive Disclosure
+
+### Input Fields
+
+1. **Activity Type** (Required)
+   - UI: Card/button interface
+   - Options: Call, Document Review, Drafting, Research, Email/Correspondence, Meeting, Analysis, etc.
+   - Maps to: `ActionVerb` component of Golden Formula
+
+2. **Subject/Who/What** (Required)
+   - UI: Dropdown or text field (conditionally revealed after Activity selection)
+   - Examples: "Founder", "Series A Term Sheet", "Co-counsel", "Cap Table", "Stock Purchase Agreement"
+   - Maps to: `SpecificTask` component of Golden Formula
+
+3. **Goal/Purpose** (Required)
+   - UI: Free-text field
+   - Prompt: "What was the purpose or goal?"
+   - Examples: "discuss funding structure", "identify control provisions", "clarify dilution terms"
+   - Maps to: `Context/Reason (Value)` component of Golden Formula
+
+4. **Time Duration** (Optional)
+   - UI: Number input
+   - Format: 0.1-hour increments (6-minute billing blocks)
+   - Default: Empty (can be added to time tracking later)
+
+### Flow Sequence
+
+```
+User lands on form
+    ↓
+Selects Activity Type (cards/buttons)
+    ↓
+Subject field appears (progressive disclosure)
+    ↓
+User fills Subject + Goal
+    ↓
+(Optional) User adds time duration
+    ↓
+Clicks "Generate"
+    ↓
+System outputs compliant narrative(s)
+```
+
+### Example Entry
+
+**Input:**
+- Activity: `Call`
+- Subject: `Founder`
+- Goal: `discuss Series A term sheet provisions`
+- Time: `0.3` (18 minutes)
+
+**Output:**
+```
+"Telephone conference with Founder regarding Series A term sheet 
+provisions to identify non-standard control rights and liquidation 
+preferences"
+```
 
 ---
 
