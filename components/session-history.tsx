@@ -14,7 +14,8 @@ interface SessionHistoryProps {
 
 export function SessionHistory({ history, onClear }: SessionHistoryProps) {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedFullId, setCopiedFullId] = useState<string | null>(null);
+  const [copiedNarrativeId, setCopiedNarrativeId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
     const newExpanded = new Set(expandedIds);
@@ -26,7 +27,7 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
     setExpandedIds(newExpanded);
   };
 
-  const handleCopy = async (entry: HistoryEntry) => {
+  const handleCopyFull = async (entry: HistoryEntry) => {
     try {
       let textToCopy = entry.output;
       
@@ -39,8 +40,18 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
       }
       
       await navigator.clipboard.writeText(textToCopy);
-      setCopiedId(entry.id);
-      setTimeout(() => setCopiedId(null), 2000);
+      setCopiedFullId(entry.id);
+      setTimeout(() => setCopiedFullId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleCopyNarrative = async (entry: HistoryEntry) => {
+    try {
+      await navigator.clipboard.writeText(entry.output);
+      setCopiedNarrativeId(entry.id);
+      setTimeout(() => setCopiedNarrativeId(null), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -83,7 +94,8 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
         <div className="space-y-3">
           {history.map((entry) => {
             const isExpanded = expandedIds.has(entry.id);
-            const isCopied = copiedId === entry.id;
+            const isCopiedFull = copiedFullId === entry.id;
+            const isCopiedNarrative = copiedNarrativeId === entry.id;
 
             return (
               <div
@@ -112,13 +124,27 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleCopy(entry)}
-                      className="h-8 w-8 p-0"
-                      aria-label={isCopied ? "Copied" : "Copy to clipboard"}
+                      onClick={() => handleCopyFull(entry)}
+                      className="h-8 px-2"
+                      aria-label={isCopiedFull ? "Copied all" : "Copy all"}
+                      title="Copy with details"
                     >
                       <Copy className={cn(
                         "h-3.5 w-3.5",
-                        isCopied && "text-green-600"
+                        isCopiedFull && "text-green-600"
+                      )} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleCopyNarrative(entry)}
+                      className="h-8 px-2"
+                      aria-label={isCopiedNarrative ? "Copied narrative" : "Copy narrative only"}
+                      title="Copy narrative only"
+                    >
+                      <Copy className={cn(
+                        "h-3.5 w-3.5 opacity-60",
+                        isCopiedNarrative && "text-green-600 opacity-100"
                       )} />
                     </Button>
                     <Button

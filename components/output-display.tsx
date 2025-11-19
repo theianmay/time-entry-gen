@@ -15,9 +15,10 @@ interface OutputDisplayProps {
 }
 
 export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
-  const [copied, setCopied] = useState(false);
+  const [copiedFull, setCopiedFull] = useState(false);
+  const [copiedNarrative, setCopiedNarrative] = useState(false);
 
-  const handleCopy = async () => {
+  const handleCopyFull = async () => {
     try {
       // Build the full text to copy including time and client/matter if present
       let textToCopy = output;
@@ -31,8 +32,19 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
       }
       
       await navigator.clipboard.writeText(textToCopy);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setCopiedFull(true);
+      setTimeout(() => setCopiedFull(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const handleCopyNarrative = async () => {
+    try {
+      // Copy only the narrative text, no metadata
+      await navigator.clipboard.writeText(output);
+      setCopiedNarrative(true);
+      setTimeout(() => setCopiedNarrative(false), 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -90,29 +102,51 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
           </div>
         )}
 
-        <div className="flex gap-2">
-          <Button
-            onClick={handleCopy}
-            variant="default"
-            className="flex-1"
-            disabled={copied}
-            aria-label="Copy billing narrative to clipboard"
-          >
-            {copied ? (
-              <>
-                <Check className="mr-2 h-4 w-4" />
-                Copied!
-              </>
-            ) : (
-              <>
-                <Copy className="mr-2 h-4 w-4" />
-                Copy to Clipboard
-              </>
-            )}
-          </Button>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Button
+              onClick={handleCopyFull}
+              variant="default"
+              className="flex-1"
+              disabled={copiedFull}
+              aria-label="Copy narrative with time and client/matter"
+            >
+              {copiedFull ? (
+                <>
+                  <Check className="mr-2 h-4 w-4" />
+                  Copied All!
+                </>
+              ) : (
+                <>
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copy All (with details)
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleCopyNarrative}
+              variant="secondary"
+              className="flex-1"
+              disabled={copiedNarrative}
+              aria-label="Copy narrative only"
+            >
+              {copiedNarrative ? (
+                <>
+                  <Check className="mr-2 h-4 w-4" />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copy Narrative Only
+                </>
+              )}
+            </Button>
+          </div>
           <Button 
             onClick={onClear} 
             variant="outline"
+            className="w-full"
             aria-label="Clear output and generate new entry"
           >
             Generate New Entry
