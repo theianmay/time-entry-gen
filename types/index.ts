@@ -4,6 +4,7 @@ export interface FormData {
   subject: string;
   goal: string;
   time?: number;
+  clientMatter?: string;
 }
 
 // Session history entry

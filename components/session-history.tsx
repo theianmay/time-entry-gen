@@ -29,8 +29,13 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
   const handleCopy = async (entry: HistoryEntry) => {
     try {
       let textToCopy = entry.output;
+      
       if (entry.input.time) {
         textToCopy += `\n\nTime: ${entry.input.time} hours (${Math.round(entry.input.time * 60)} minutes)`;
+      }
+      
+      if (entry.input.clientMatter) {
+        textToCopy += `\nClient/Matter: ${entry.input.clientMatter}`;
       }
       
       await navigator.clipboard.writeText(textToCopy);
@@ -143,6 +148,11 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
                       {entry.input.time && (
                         <p className="text-muted-foreground">
                           <span className="font-medium">Time:</span> {entry.input.time} hours
+                        </p>
+                      )}
+                      {entry.input.clientMatter && (
+                        <p className="text-muted-foreground">
+                          <span className="font-medium">Client/Matter:</span> {entry.input.clientMatter}
                         </p>
                       )}
                     </div>

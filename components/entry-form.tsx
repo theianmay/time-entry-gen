@@ -31,6 +31,7 @@ const formSchema = z.object({
     .step(0.1, 'Time must be in 0.1 hour increments')
     .optional()
     .or(z.literal(undefined)),
+  clientMatter: z.string().optional(),
 });
 
 interface EntryFormProps {
@@ -46,6 +47,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
       subject: '',
       goal: '',
       time: undefined,
+      clientMatter: '',
     },
   });
 
@@ -156,6 +158,27 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                   </FormControl>
                   <FormDescription>
                     Enter time in 0.1-hour increments (6-minute blocks)
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="clientMatter"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Client/Matter (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g., Acme Corp - Series A"
+                      autoComplete="off"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Client name or matter reference for your records
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

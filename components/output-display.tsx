@@ -9,19 +9,25 @@ import { cn } from '@/lib/utils';
 interface OutputDisplayProps {
   output: string;
   time?: number;
+  clientMatter?: string;
   usedFallback: boolean;
   onClear: () => void;
 }
 
-export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDisplayProps) {
+export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
     try {
-      // Build the full text to copy including time if present
+      // Build the full text to copy including time and client/matter if present
       let textToCopy = output;
+      
       if (time) {
         textToCopy += `\n\nTime: ${time} hours (${Math.round(time * 60)} minutes)`;
+      }
+      
+      if (clientMatter) {
+        textToCopy += `\nClient/Matter: ${clientMatter}`;
       }
       
       await navigator.clipboard.writeText(textToCopy);
@@ -64,13 +70,23 @@ export function OutputDisplay({ output, time, usedFallback, onClear }: OutputDis
           {output}
         </div>
 
-        {time && (
-          <div className="flex items-center gap-2 text-sm">
-            <span className="font-medium text-muted-foreground">Time:</span>
-            <span className="font-semibold">{time} hours</span>
-            <span className="text-muted-foreground">
-              ({Math.round(time * 60)} minutes)
-            </span>
+        {(time || clientMatter) && (
+          <div className="space-y-1">
+            {time && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-medium text-muted-foreground">Time:</span>
+                <span className="font-semibold">{time} hours</span>
+                <span className="text-muted-foreground">
+                  ({Math.round(time * 60)} minutes)
+                </span>
+              </div>
+            )}
+            {clientMatter && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="font-medium text-muted-foreground">Client/Matter:</span>
+                <span className="font-semibold">{clientMatter}</span>
+              </div>
+            )}
           </div>
         )}
 
