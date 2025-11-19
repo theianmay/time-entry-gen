@@ -1,9 +1,9 @@
 /**
  * Transformation Engine
  * Orchestrates AI generation with fallback to deterministic rules
+ * Now uses server-side API route to keep API key secure
  */
 
-import { generateBillingNarrative, validateApiKey } from './openai-client';
 import { applyDeterministicRules } from './fallback-transformer';
 import { GenerationResult } from '@/types';
 import { getRateLimiter, formatResetTime } from './rate-limiter';
@@ -42,33 +42,41 @@ export async function generateWithFallback(
     };
   }
 
-  // Check if API key is configured
-  if (!validateApiKey()) {
-    console.warn('OpenAI API key not configured, using fallback mode');
-    const output = applyDeterministicRules(activity, subject, goal);
-    return {
-      output,
-      method: 'fallback',
-    };
-  }
-
   try {
-    // Attempt OpenAI generation
-    const output = await generateBillingNarrative({
-      activity,
-      subject,
-      goal,
+    // Call server-side API route
+    const response = await fetch('/api/generate', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        activity,
+        subject,
+        goal,
+      }),
     });
+
+    const data = await response.json();
+
+    // Handle errors from API
+    if (!response.ok || data.useFallback) {
+      console.warn('API generation failed, using fallback:', data.error);
+      const output = applyDeterministicRules(activity, subject, goal);
+      return {
+        output,
+        method: 'fallback',
+      };
+    }
 
     // Log successful request for rate limiting
     rateLimiter.logRequest(650); // Estimated tokens per request
 
     return {
-      output,
+      output: data.output,
       method: 'ai',
     };
   } catch (error) {
-    console.error('OpenAI generation failed, using fallback:', error);
+    console.error('API call failed, using fallback:', error);
 
     // Fall back to deterministic rules
     const output = applyDeterministicRules(activity, subject, goal);

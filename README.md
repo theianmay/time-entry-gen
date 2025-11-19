@@ -49,8 +49,10 @@ TimeCraft is a Next.js application that transforms raw time entries into profess
    
    Edit `.env.local` and add your OpenAI API key:
    ```env
-   NEXT_PUBLIC_OPENAI_API_KEY=sk-your-actual-api-key-here
+   OPENAI_API_KEY=sk-your-actual-api-key-here
    ```
+   
+   **⚠️ Important:** Do NOT use `NEXT_PUBLIC_` prefix - this would expose your key to the browser!
 
 4. **Run the development server**
    ```bash
@@ -194,7 +196,9 @@ Comprehensive manual testing checklist available in [docs/testing-checklist.md](
 1. Push your code to GitHub
 2. Import project in [Vercel](https://vercel.com)
 3. Add environment variable:
-   - `NEXT_PUBLIC_OPENAI_API_KEY`: Your OpenAI API key
+   - Key: `OPENAI_API_KEY` (no `NEXT_PUBLIC_` prefix!)
+   - Value: Your OpenAI API key
+   - **Important:** Do NOT check "Expose to client"
 4. Deploy!
 
 ### Build for Production
@@ -208,17 +212,11 @@ npm start
 
 ## 🔒 Security Notes
 
-**Current (MVP):**
-- API key is client-side (acceptable for personal use)
-- Rate limiting is client-side
-
-**For Production:**
-- Move API calls to server-side (Vercel Edge Functions)
-- Implement server-side rate limiting
-- Add user authentication
-- Use environment variables server-side only
-
-See [docs/future-enhancements.md](docs/future-enhancements.md) for roadmap.
+**✅ Secure (Current):**
+- API key is server-side only (never exposed to browser)
+- All OpenAI calls go through `/api/generate` route
+- Environment variable uses `OPENAI_API_KEY` (no `NEXT_PUBLIC_` prefix)
+- Rate limiting prevents accidental abuse
 
 ---
 
