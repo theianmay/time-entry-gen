@@ -1,3 +1,6 @@
+// Output format types
+export type OutputFormat = 'numbered' | 'bullets' | 'hyphens' | 'none';
+
 // Form data types
 export interface FormData {
   activity: string;
@@ -5,6 +8,7 @@ export interface FormData {
   goal: string;
   time?: number;
   clientMatter?: string;
+  format?: OutputFormat;
 }
 
 // Session history entry
@@ -37,4 +41,6 @@ export interface Activity {
   label: string;
   icon: string;
   description: string;
+  color: string;
+  gradient: string;
 }
