@@ -8,6 +8,7 @@ import { ActivitySelector } from './activity-selector';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Form,
   FormControl,
@@ -80,8 +81,15 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
         />
 
         {/* Progressive Disclosure: Subject field appears after activity selection */}
-        {selectedActivity && (
-          <>
+        <AnimatePresence mode="wait">
+          {selectedActivity && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, y: -10 }}
+              animate={{ opacity: 1, height: 'auto', y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -10 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              className="space-y-6"
+            >
             <FormField
               control={form.control}
               name="subject"
@@ -200,8 +208,9 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                 'Generate Billing Narrative'
               )}
             </Button>
-          </>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </form>
     </Form>
   );

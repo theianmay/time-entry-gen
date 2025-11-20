@@ -5,6 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Check, Copy, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
+import { toast } from 'sonner';
 
 interface OutputDisplayProps {
   output: string;
@@ -17,6 +20,36 @@ interface OutputDisplayProps {
 export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
   const [copiedFull, setCopiedFull] = useState(false);
   const [copiedNarrative, setCopiedNarrative] = useState(false);
+
+  const triggerConfetti = () => {
+    const duration = 2000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval: NodeJS.Timeout = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    }, 250);
+  };
 
   const handleCopyFull = async () => {
     try {
@@ -34,8 +67,17 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
       await navigator.clipboard.writeText(textToCopy);
       setCopiedFull(true);
       setTimeout(() => setCopiedFull(false), 2000);
+      
+      // Trigger confetti and toast
+      triggerConfetti();
+      toast.success('Copied to clipboard!', {
+        description: 'Narrative with time and client/matter details',
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('Failed to copy', {
+        description: 'Please try again',
+      });
     }
   };
 
@@ -45,13 +87,27 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
       await navigator.clipboard.writeText(output);
       setCopiedNarrative(true);
       setTimeout(() => setCopiedNarrative(false), 2000);
+      
+      // Trigger confetti and toast
+      triggerConfetti();
+      toast.success('Copied to clipboard!', {
+        description: 'Narrative text only',
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('Failed to copy', {
+        description: 'Please try again',
+      });
     }
   };
 
   return (
-    <Card className="border-2 animate-in fade-in-50 slide-in-from-bottom-4 duration-300">
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+    >
+      <Card className="border-2 shadow-xl">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -154,5 +210,6 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
         </div>
       </CardContent>
     </Card>
+    </motion.div>
   );
 }

@@ -37,4 +37,6 @@ export interface Activity {
   label: string;
   icon: string;
   description: string;
+  color: string;
+  gradient: string;
 }
