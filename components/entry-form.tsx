@@ -71,7 +71,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
             <CardTitle className="text-xl">Create Time Entry</CardTitle>
           </div>
           <CardDescription>
-            Fill in the details below to generate a polished billing narrative
+            Elevate your notes into structured, polished, write-off resistant narratives
           </CardDescription>
         </CardHeader>
         <CardContent>

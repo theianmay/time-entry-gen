@@ -48,17 +48,21 @@ export function ActivitySelector({ value, onChange }: ActivitySelectorProps) {
                   isSelected && 'ring-2 ring-offset-2 shadow-xl',
                   isSelected && `ring-${activity.color}-500`
                 )}
-                onClick={() => onChange(activity.id)}
+                onClick={() => {
+                  // Toggle: if already selected, deselect (empty string)
+                  onChange(isSelected ? '' as ActivityType : activity.id);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    onChange(activity.id);
+                    // Toggle: if already selected, deselect (empty string)
+                    onChange(isSelected ? '' as ActivityType : activity.id);
                   }
                 }}
                 tabIndex={0}
                 role="button"
                 aria-pressed={isSelected}
-                aria-label={`Select ${activity.label}: ${activity.description}`}
+                aria-label={isSelected ? `Deselect ${activity.label}` : `Select ${activity.label}: ${activity.description}`}
               >
                 {/* Gradient overlay on hover/selected */}
                 {isSelected && (
