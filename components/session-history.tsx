@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { HistoryEntry } from '@/types';
-import { Clock, Copy, ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
+import { Clock, Copy, ChevronDown, ChevronUp, Trash2, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface SessionHistoryProps {
   history: HistoryEntry[];
@@ -70,15 +71,38 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-lg">Session History</CardTitle>
-            <CardDescription>
-              {history.length} {history.length === 1 ? 'entry' : 'entries'} generated this session
-            </CardDescription>
-          </div>
+    <TooltipProvider>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-lg">Session History</CardTitle>
+                <Tooltip delayDuration={200}>
+                  <TooltipTrigger asChild>
+                    <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 text-xs font-medium cursor-help">
+                      <Info className="h-3 w-3" />
+                      <span>Session Only</span>
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent 
+                    side="top" 
+                    align="start" 
+                    sideOffset={8}
+                    className="max-w-xs z-50"
+                    avoidCollisions={true}
+                    collisionPadding={10}
+                  >
+                    <p className="text-xs">
+                      History is stored in memory only and will be cleared when you refresh the page or close your browser.
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <CardDescription>
+                {history.length} {history.length === 1 ? 'entry' : 'entries'} generated this session
+              </CardDescription>
+            </div>
           <Button
             variant="ghost"
             size="sm"
@@ -193,5 +217,6 @@ export function SessionHistory({ history, onClear }: SessionHistoryProps) {
         </div>
       </CardContent>
     </Card>
+    </TooltipProvider>
   );
 }

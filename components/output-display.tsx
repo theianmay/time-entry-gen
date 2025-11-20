@@ -1,22 +1,118 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Copy, AlertTriangle } from 'lucide-react';
+import { Check, Copy, AlertTriangle, ListOrdered, List, Minus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import confetti from 'canvas-confetti';
+import { toast } from 'sonner';
+import { OutputFormat } from '@/types';
 
 interface OutputDisplayProps {
   output: string;
   time?: number;
   clientMatter?: string;
+  format: OutputFormat;
   usedFallback: boolean;
   onClear: () => void;
 }
 
-export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
+export function OutputDisplay({ output, time, clientMatter, format: initialFormat, usedFallback, onClear }: OutputDisplayProps) {
   const [copiedFull, setCopiedFull] = useState(false);
   const [copiedNarrative, setCopiedNarrative] = useState(false);
+  const [currentFormat, setCurrentFormat] = useState<OutputFormat>(initialFormat);
+  const copyCountRef = useRef(0);
+  const nextConfettiAtRef = useRef(0);
+
+  // Format options for toggle buttons
+  const FORMAT_OPTIONS = [
+    { value: 'numbered' as OutputFormat, icon: ListOrdered, label: '1,2,3' },
+    { value: 'bullets' as OutputFormat, icon: List, label: '• • •' },
+    { value: 'hyphens' as OutputFormat, icon: Minus, label: '- - -' },
+    { value: 'none' as OutputFormat, icon: X, label: 'None' },
+  ];
+
+  // Transform output based on format
+  const formatOutput = (text: string, format: OutputFormat): string => {
+    // Split by lines and identify numbered items
+    const lines = text.split('\n');
+    const formattedLines = lines.map((line) => {
+      // Match numbered list items (e.g., "1. ", "2. ", etc.)
+      const numberedMatch = line.match(/^(\d+)\.\s+(.*)$/);
+      
+      if (numberedMatch) {
+        const [, , content] = numberedMatch;
+        switch (format) {
+          case 'numbered':
+            return line; // Keep as is
+          case 'bullets':
+            return `• ${content}`;
+          case 'hyphens':
+            return `- ${content}`;
+          case 'none':
+            return content;
+          default:
+            return line;
+        }
+      }
+      return line;
+    });
+    return formattedLines.join('\n');
+  };
+
+  const formattedOutput = formatOutput(output, currentFormat);
+
+  const shouldTriggerConfetti = () => {
+    copyCountRef.current += 1;
+    
+    // First copy always gets confetti
+    if (copyCountRef.current === 1) {
+      // Set next confetti trigger to random number between 20-100
+      nextConfettiAtRef.current = Math.floor(Math.random() * 81) + 20; // 20-100
+      return true;
+    }
+    
+    // Check if we've reached the random trigger point
+    if (copyCountRef.current >= nextConfettiAtRef.current) {
+      // Reset for next random occurrence
+      nextConfettiAtRef.current = copyCountRef.current + Math.floor(Math.random() * 81) + 20;
+      return true;
+    }
+    
+    return false;
+  };
+
+  const triggerConfetti = () => {
+    const duration = 2000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval: NodeJS.Timeout = setInterval(function() {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 50 * (timeLeft / duration);
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+      });
+      confetti({
+        ...defaults,
+        particleCount,
+        origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+      });
+    }, 250);
+  };
 
   const handleCopyFull = async () => {
     try {
@@ -31,27 +127,57 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
         textToCopy += `\nClient/Matter: ${clientMatter}`;
       }
       
-      await navigator.clipboard.writeText(textToCopy);
+      const formattedText = formatOutput(textToCopy, currentFormat);
+      await navigator.clipboard.writeText(formattedText);
       setCopiedFull(true);
       setTimeout(() => setCopiedFull(false), 2000);
+      
+      // Trigger confetti only on first copy or random occurrence
+      if (shouldTriggerConfetti()) {
+        triggerConfetti();
+      }
+      
+      toast.success('Copied to clipboard!', {
+        description: 'Narrative with time and client/matter details',
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('Failed to copy', {
+        description: 'Please try again',
+      });
     }
   };
 
   const handleCopyNarrative = async () => {
     try {
       // Copy only the narrative text, no metadata
-      await navigator.clipboard.writeText(output);
+      await navigator.clipboard.writeText(formattedOutput);
       setCopiedNarrative(true);
       setTimeout(() => setCopiedNarrative(false), 2000);
+      
+      // Trigger confetti only on first copy or random occurrence
+      if (shouldTriggerConfetti()) {
+        triggerConfetti();
+      }
+      
+      toast.success('Copied to clipboard!', {
+        description: 'Narrative text only',
+      });
     } catch (err) {
       console.error('Failed to copy:', err);
+      toast.error('Failed to copy', {
+        description: 'Please try again',
+      });
     }
   };
 
   return (
-    <Card className="border-2 animate-in fade-in-50 slide-in-from-bottom-4 duration-300">
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
+    >
+      <Card className="border-2 shadow-xl">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div>
@@ -78,8 +204,34 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
           </div>
         )}
 
-        <div className="bg-muted rounded-lg p-4 font-mono text-sm leading-relaxed">
-          {output}
+        {/* Format Toggle Buttons */}
+        <div className="flex items-center gap-2 pb-2 border-b">
+          <span className="text-sm font-medium text-muted-foreground">Format:</span>
+          <div className="flex gap-1">
+            {FORMAT_OPTIONS.map((option) => {
+              const Icon = option.icon;
+              const isActive = currentFormat === option.value;
+              return (
+                <Button
+                  key={option.value}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentFormat(option.value)}
+                  className={cn(
+                    'h-8 px-3 transition-all',
+                    isActive && 'shadow-md'
+                  )}
+                >
+                  <Icon className="h-3.5 w-3.5 mr-1.5" />
+                  <span className="text-xs">{option.label}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-muted rounded-lg p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+          {formattedOutput}
         </div>
 
         {(time || clientMatter) && (
@@ -154,5 +306,6 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
         </div>
       </CardContent>
     </Card>
+    </motion.div>
   );
 }
