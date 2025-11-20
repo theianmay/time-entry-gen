@@ -12,6 +12,7 @@ import { generateWithFallback } from '@/lib/transformation-engine';
 export default function Home() {
   const [output, setOutput] = useState<string | null>(null);
   const [time, setTime] = useState<number | undefined>(undefined);
+  const [clientMatter, setClientMatter] = useState<string | undefined>(undefined);
   const [isGenerating, setIsGenerating] = useState(false);
   const [usedFallback, setUsedFallback] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -30,6 +31,7 @@ export default function Home() {
 
       setOutput(result.output);
       setTime(data.time);
+      setClientMatter(data.clientMatter);
       setUsedFallback(result.method === 'fallback');
 
       // Add to history
@@ -95,6 +97,7 @@ export default function Home() {
               <OutputDisplay
                 output={output}
                 time={time}
+                clientMatter={clientMatter}
                 usedFallback={usedFallback}
                 onClear={handleClear}
               />
