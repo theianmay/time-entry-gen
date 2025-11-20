@@ -192,9 +192,14 @@ export default function Home() {
               <div className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-lg p-1.5">
                 <FileText className="h-3.5 w-3.5" />
               </div>
-              <p>
-                TimeCraft <span className="text-xs">v0.1.0</span>
-              </p>
+              <div className="flex flex-col">
+                <p>
+                  TimeCraft <span className="text-xs">v0.1.0</span>
+                </p>
+                <p className="text-xs">
+                  Powered by OpenAI API
+                </p>
+              </div>
             </div>
             <div className="flex items-center gap-1">
               <p>Built with</p>
