@@ -14,10 +14,15 @@ interface ActivitySelectorProps {
 
 export function ActivitySelector({ value, onChange }: ActivitySelectorProps) {
   return (
-    <div className="space-y-3">
-      <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-        Activity Type <span className="text-destructive">*</span>
-      </label>
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <label className="text-base font-semibold leading-none">
+          Activity Type
+        </label>
+        <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
+          Required
+        </span>
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {ACTIVITIES.map((activity, index) => {
           const Icon = Icons[activity.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }>;

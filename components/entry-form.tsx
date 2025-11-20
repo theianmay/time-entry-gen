@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ActivitySelector } from './activity-selector';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2 } from 'lucide-react';
+import { Loader2, User, Target, Clock, Briefcase, Sparkles } from 'lucide-react';
 import { FormData as FormDataType } from '@/types';
 
 // Zod schema for form validation
@@ -61,24 +62,35 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-        {/* Activity Selection */}
-        <FormField
-          control={form.control}
-          name="activity"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <ActivitySelector
-                  value={field.value}
-                  onChange={field.onChange}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <Card className="border-2 shadow-lg">
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <Sparkles className="h-5 w-5 text-purple-500" />
+          <CardTitle className="text-xl">Create Time Entry</CardTitle>
+        </div>
+        <CardDescription>
+          Fill in the details below to generate a polished billing narrative
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            {/* Activity Selection */}
+            <FormField
+              control={form.control}
+              name="activity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <ActivitySelector
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
         {/* Progressive Disclosure: Subject field appears after activity selection */}
         <AnimatePresence mode="wait">
@@ -95,9 +107,15 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
               name="subject"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Subject/Who/What <span className="text-destructive">*</span>
-                  </FormLabel>
+                  <div className="flex items-center gap-2 mb-2">
+                    <User className="h-4 w-4 text-muted-foreground" />
+                    <FormLabel className="text-base font-semibold mb-0">
+                      Subject/Who/What
+                    </FormLabel>
+                    <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
+                      Required
+                    </span>
+                  </div>
                   <FormControl>
                     <Input
                       placeholder='e.g., "Founder", "Series A Term Sheet", "Co-counsel"'
@@ -118,9 +136,15 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
               name="goal"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>
-                    Goal/Purpose <span className="text-destructive">*</span>
-                  </FormLabel>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Target className="h-4 w-4 text-muted-foreground" />
+                    <FormLabel className="text-base font-semibold mb-0">
+                      Goal/Purpose
+                    </FormLabel>
+                    <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
+                      Required
+                    </span>
+                  </div>
                   <FormControl>
                     <Textarea
                       placeholder='e.g., "discuss funding structure", "identify control provisions"'
@@ -143,7 +167,15 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
               name="time"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Time Duration (Optional)</FormLabel>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <FormLabel className="text-base font-semibold mb-0">
+                      Time Duration
+                    </FormLabel>
+                    <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+                      Optional
+                    </span>
+                  </div>
                   <FormControl>
                     <div className="flex items-center gap-2">
                       <Input
@@ -177,7 +209,15 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
               name="clientMatter"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Client/Matter (Optional)</FormLabel>
+                  <div className="flex items-center gap-2 mb-2">
+                    <Briefcase className="h-4 w-4 text-muted-foreground" />
+                    <FormLabel className="text-base font-semibold mb-0">
+                      Client/Matter
+                    </FormLabel>
+                    <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+                      Optional
+                    </span>
+                  </div>
                   <FormControl>
                     <Input
                       placeholder="e.g., Acme Corp - Series A"
@@ -211,7 +251,9 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
             </motion.div>
           )}
         </AnimatePresence>
-      </form>
-    </Form>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
