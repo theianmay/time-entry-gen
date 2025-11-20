@@ -6,7 +6,7 @@ import { OutputDisplay } from '@/components/output-display';
 import { OutputSkeleton } from '@/components/output-skeleton';
 import { SessionHistory } from '@/components/session-history';
 import { ThemeToggle } from '@/components/theme-toggle';
-import { FormData, HistoryEntry } from '@/types';
+import { FormData, HistoryEntry, OutputFormat } from '@/types';
 import { FileText, Sparkles, Heart, BriefcaseBusiness } from 'lucide-react';
 import { generateWithFallback } from '@/lib/transformation-engine';
 import { motion } from 'framer-motion';
@@ -16,6 +16,7 @@ export default function Home() {
   const [output, setOutput] = useState<string | null>(null);
   const [time, setTime] = useState<number | undefined>(undefined);
   const [clientMatter, setClientMatter] = useState<string | undefined>(undefined);
+  const [format, setFormat] = useState<OutputFormat>('numbered');
   const [isGenerating, setIsGenerating] = useState(false);
   const [usedFallback, setUsedFallback] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -36,6 +37,7 @@ export default function Home() {
       setOutput(result.output);
       setTime(data.time);
       setClientMatter(data.clientMatter);
+      setFormat(data.format || 'numbered');
       setUsedFallback(result.method === 'fallback');
 
       // Add to history
@@ -63,6 +65,7 @@ export default function Home() {
   const handleClear = () => {
     setOutput(null);
     setTime(undefined);
+    setFormat('numbered');
     setUsedFallback(false);
   };
 
@@ -135,6 +138,7 @@ export default function Home() {
                 output={output}
                 time={time}
                 clientMatter={clientMatter}
+                format={format}
                 usedFallback={usedFallback}
                 onClear={handleClear}
               />

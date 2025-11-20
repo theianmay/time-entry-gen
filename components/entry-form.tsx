@@ -20,8 +20,17 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2, User, Target, Clock, HelpCircle, NotebookPen, Scale   } from 'lucide-react';
-import { FormData as FormDataType } from '@/types';
+import { Loader2, User, Target, Clock, HelpCircle, NotebookPen, Scale, List, ListOrdered, Minus, X } from 'lucide-react';
+import { FormData as FormDataType, OutputFormat } from '@/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+// Format options with icons and previews
+const FORMAT_OPTIONS: { value: OutputFormat; label: string; icon: React.ComponentType<{ className?: string }>; preview: string }[] = [
+  { value: 'numbered', label: 'Numbered List', icon: ListOrdered, preview: '1. 2. 3.' },
+  { value: 'bullets', label: 'Bullet Points', icon: List, preview: '• • •' },
+  { value: 'hyphens', label: 'Hyphens', icon: Minus, preview: '- - -' },
+  { value: 'none', label: 'No Formatting', icon: X, preview: 'Plain text' },
+];
 
 // Zod schema for form validation
 const formSchema = z.object({
@@ -35,6 +44,7 @@ const formSchema = z.object({
     .optional()
     .or(z.literal(undefined)),
   clientMatter: z.string().optional(),
+  format: z.enum(['numbered', 'bullets', 'hyphens', 'none']).optional(),
 });
 
 interface EntryFormProps {
@@ -52,6 +62,7 @@ export function EntryForm({ onSubmit, isGenerating, onActivityChange }: EntryFor
       goal: '',
       time: undefined,
       clientMatter: '',
+      format: 'numbered', // Default to numbered
     },
   });
 
@@ -241,6 +252,59 @@ export function EntryForm({ onSubmit, isGenerating, onActivityChange }: EntryFor
                       autoComplete="off"
                       {...field}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="format"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="flex items-center gap-2 mb-2">
+                    <ListOrdered className="h-4 w-4 text-muted-foreground" />
+                    <FormLabel className="text-base font-semibold mb-0">
+                      Output Format
+                    </FormLabel>
+                    <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground ring-1 ring-inset ring-border">
+                      Optional
+                    </span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-xs">
+                        <p className="text-xs">Choose how to format multiple tasks in your narrative</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                  <FormControl>
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select format" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {FORMAT_OPTIONS.map((option) => {
+                          const Icon = option.icon;
+                          return (
+                            <SelectItem key={option.value} value={option.value}>
+                              <div className="flex items-center gap-3">
+                                <Icon className="h-4 w-4" />
+                                <span>{option.label}</span>
+                                <span className="text-xs text-muted-foreground ml-auto">
+                                  {option.preview}
+                                </span>
+                              </div>
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

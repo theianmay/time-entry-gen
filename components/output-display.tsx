@@ -3,25 +3,66 @@
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Copy, AlertTriangle } from 'lucide-react';
+import { Check, Copy, AlertTriangle, ListOrdered, List, Minus, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
 import { toast } from 'sonner';
+import { OutputFormat } from '@/types';
 
 interface OutputDisplayProps {
   output: string;
   time?: number;
   clientMatter?: string;
+  format: OutputFormat;
   usedFallback: boolean;
   onClear: () => void;
 }
 
-export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
+export function OutputDisplay({ output, time, clientMatter, format: initialFormat, usedFallback, onClear }: OutputDisplayProps) {
   const [copiedFull, setCopiedFull] = useState(false);
   const [copiedNarrative, setCopiedNarrative] = useState(false);
+  const [currentFormat, setCurrentFormat] = useState<OutputFormat>(initialFormat);
   const copyCountRef = useRef(0);
   const nextConfettiAtRef = useRef(0);
+
+  // Format options for toggle buttons
+  const FORMAT_OPTIONS = [
+    { value: 'numbered' as OutputFormat, icon: ListOrdered, label: '1,2,3' },
+    { value: 'bullets' as OutputFormat, icon: List, label: '• • •' },
+    { value: 'hyphens' as OutputFormat, icon: Minus, label: '- - -' },
+    { value: 'none' as OutputFormat, icon: X, label: 'None' },
+  ];
+
+  // Transform output based on format
+  const formatOutput = (text: string, format: OutputFormat): string => {
+    // Split by lines and identify numbered items
+    const lines = text.split('\n');
+    const formattedLines = lines.map((line) => {
+      // Match numbered list items (e.g., "1. ", "2. ", etc.)
+      const numberedMatch = line.match(/^(\d+)\.\s+(.*)$/);
+      
+      if (numberedMatch) {
+        const [, , content] = numberedMatch;
+        switch (format) {
+          case 'numbered':
+            return line; // Keep as is
+          case 'bullets':
+            return `• ${content}`;
+          case 'hyphens':
+            return `- ${content}`;
+          case 'none':
+            return content;
+          default:
+            return line;
+        }
+      }
+      return line;
+    });
+    return formattedLines.join('\n');
+  };
+
+  const formattedOutput = formatOutput(output, currentFormat);
 
   const shouldTriggerConfetti = () => {
     copyCountRef.current += 1;
@@ -86,7 +127,8 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
         textToCopy += `\nClient/Matter: ${clientMatter}`;
       }
       
-      await navigator.clipboard.writeText(textToCopy);
+      const formattedText = formatOutput(textToCopy, currentFormat);
+      await navigator.clipboard.writeText(formattedText);
       setCopiedFull(true);
       setTimeout(() => setCopiedFull(false), 2000);
       
@@ -109,7 +151,7 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
   const handleCopyNarrative = async () => {
     try {
       // Copy only the narrative text, no metadata
-      await navigator.clipboard.writeText(output);
+      await navigator.clipboard.writeText(formattedOutput);
       setCopiedNarrative(true);
       setTimeout(() => setCopiedNarrative(false), 2000);
       
@@ -162,8 +204,34 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
           </div>
         )}
 
-        <div className="bg-muted rounded-lg p-4 font-mono text-sm leading-relaxed">
-          {output}
+        {/* Format Toggle Buttons */}
+        <div className="flex items-center gap-2 pb-2 border-b">
+          <span className="text-sm font-medium text-muted-foreground">Format:</span>
+          <div className="flex gap-1">
+            {FORMAT_OPTIONS.map((option) => {
+              const Icon = option.icon;
+              const isActive = currentFormat === option.value;
+              return (
+                <Button
+                  key={option.value}
+                  variant={isActive ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setCurrentFormat(option.value)}
+                  className={cn(
+                    'h-8 px-3 transition-all',
+                    isActive && 'shadow-md'
+                  )}
+                >
+                  <Icon className="h-3.5 w-3.5 mr-1.5" />
+                  <span className="text-xs">{option.label}</span>
+                </Button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="bg-muted rounded-lg p-4 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+          {formattedOutput}
         </div>
 
         {(time || clientMatter) && (
