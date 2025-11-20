@@ -7,7 +7,7 @@ import { OutputSkeleton } from '@/components/output-skeleton';
 import { SessionHistory } from '@/components/session-history';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { FormData, HistoryEntry } from '@/types';
-import { FileText, Sparkles } from 'lucide-react';
+import { FileText, Sparkles, Heart, BriefcaseBusiness } from 'lucide-react';
 import { generateWithFallback } from '@/lib/transformation-engine';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -91,7 +91,7 @@ export default function Home() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
                   TimeCraft
                 </h1>
-                <Sparkles className="h-5 w-5 text-purple-500 dark:text-purple-400" />
+                <BriefcaseBusiness className="h-6 w-6 text-purple-500 dark:text-purple-400 pt-1" />
               </div>
               <p className="text-sm text-muted-foreground max-w-md">
                 Transform time entries into polished billing narratives in seconds
@@ -178,7 +178,7 @@ export default function Home() {
             </div>
             <div className="flex items-center gap-1">
               <p>Built with</p>
-              <Sparkles className="h-3.5 w-3.5 text-purple-500" />
+              <Heart className="h-5 w-5 text-purple-500" />
               <p>for legal professionals</p>
             </div>
           </div>

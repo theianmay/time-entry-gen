@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2, User, Target, Clock, Briefcase, Sparkles, HelpCircle } from 'lucide-react';
+import { Loader2, User, Target, Clock, HelpCircle, NotebookPen, Scale   } from 'lucide-react';
 import { FormData as FormDataType } from '@/types';
 
 // Zod schema for form validation
@@ -67,7 +67,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
       <Card className="border-2 shadow-lg">
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-500" />
+            <NotebookPen className="h-5 w-5 text-purple-500" />
             <CardTitle className="text-xl">Create Time Entry</CardTitle>
           </div>
           <CardDescription>
@@ -219,7 +219,7 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex items-center gap-2 mb-2">
-                    <Briefcase className="h-4 w-4 text-muted-foreground" />
+                    <Scale className="h-4 w-4 text-muted-foreground" />
                     <FormLabel className="text-base font-semibold mb-0">
                       Client/Matter
                     </FormLabel>
