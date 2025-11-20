@@ -19,6 +19,7 @@ export default function Home() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [usedFallback, setUsedFallback] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [selectedActivity, setSelectedActivity] = useState<string>('');
 
   const handleGenerate = async (data: FormData) => {
     setIsGenerating(true);
@@ -113,7 +114,11 @@ export default function Home() {
         <div className="space-y-8">
           {/* Form Section */}
           <section>
-            <EntryForm onSubmit={handleGenerate} isGenerating={isGenerating} />
+            <EntryForm 
+              onSubmit={handleGenerate} 
+              isGenerating={isGenerating}
+              onActivityChange={setSelectedActivity}
+            />
           </section>
 
           {/* Loading Skeleton */}
@@ -137,7 +142,7 @@ export default function Home() {
           )}
 
           {/* Help Text */}
-          {!output && !isGenerating && (
+          {!output && !isGenerating && !selectedActivity && (
             <motion.section 
               className="text-center space-y-4"
               initial={{ opacity: 0 }}
@@ -148,6 +153,17 @@ export default function Home() {
                 <Sparkles className="h-4 w-4 text-purple-500" />
                 <p>Select an activity type to begin</p>
               </div>
+            </motion.section>
+          )}
+
+          {/* Info Text */}
+          {!output && !isGenerating && (
+            <motion.section 
+              className="text-center space-y-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
               <p className="text-xs text-muted-foreground max-w-md mx-auto">
                 All entries follow the <span className="font-semibold text-foreground">Golden Formula</span>: 
                 ActionVerb + SpecificTask + Context/Reason

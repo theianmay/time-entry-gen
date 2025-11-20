@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -40,9 +40,10 @@ const formSchema = z.object({
 interface EntryFormProps {
   onSubmit: (data: FormDataType) => Promise<void>;
   isGenerating: boolean;
+  onActivityChange?: (activity: string) => void;
 }
 
-export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
+export function EntryForm({ onSubmit, isGenerating, onActivityChange }: EntryFormProps) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,6 +57,13 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
 
   // Watch activity selection for progressive disclosure
   const selectedActivity = form.watch('activity');
+  
+  // Notify parent component when activity changes
+  React.useEffect(() => {
+    if (onActivityChange) {
+      onActivityChange(selectedActivity);
+    }
+  }, [selectedActivity, onActivityChange]);
 
   const handleSubmit = async (data: FormDataType) => {
     await onSubmit(data);
