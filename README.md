@@ -4,7 +4,7 @@
 
 TimeCraft is a Next.js application that transforms raw time entries into professional billing narratives using AI. Every output follows the "Golden Formula": **ActionVerb + SpecificTask + Context/Reason (Value)**.
 
-![TimeCraft Screenshot](docs/screenshot-placeholder.png)
+![TimeCraft Screenshot](docs/screenshot2.png)
 
 ---
 
