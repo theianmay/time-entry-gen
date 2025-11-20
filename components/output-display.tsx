@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, Copy, AlertTriangle } from 'lucide-react';
@@ -20,6 +20,28 @@ interface OutputDisplayProps {
 export function OutputDisplay({ output, time, clientMatter, usedFallback, onClear }: OutputDisplayProps) {
   const [copiedFull, setCopiedFull] = useState(false);
   const [copiedNarrative, setCopiedNarrative] = useState(false);
+  const copyCountRef = useRef(0);
+  const nextConfettiAtRef = useRef(0);
+
+  const shouldTriggerConfetti = () => {
+    copyCountRef.current += 1;
+    
+    // First copy always gets confetti
+    if (copyCountRef.current === 1) {
+      // Set next confetti trigger to random number between 20-100
+      nextConfettiAtRef.current = Math.floor(Math.random() * 81) + 20; // 20-100
+      return true;
+    }
+    
+    // Check if we've reached the random trigger point
+    if (copyCountRef.current >= nextConfettiAtRef.current) {
+      // Reset for next random occurrence
+      nextConfettiAtRef.current = copyCountRef.current + Math.floor(Math.random() * 81) + 20;
+      return true;
+    }
+    
+    return false;
+  };
 
   const triggerConfetti = () => {
     const duration = 2000;
@@ -68,8 +90,11 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
       setCopiedFull(true);
       setTimeout(() => setCopiedFull(false), 2000);
       
-      // Trigger confetti and toast
-      triggerConfetti();
+      // Trigger confetti only on first copy or random occurrence
+      if (shouldTriggerConfetti()) {
+        triggerConfetti();
+      }
+      
       toast.success('Copied to clipboard!', {
         description: 'Narrative with time and client/matter details',
       });
@@ -88,8 +113,11 @@ export function OutputDisplay({ output, time, clientMatter, usedFallback, onClea
       setCopiedNarrative(true);
       setTimeout(() => setCopiedNarrative(false), 2000);
       
-      // Trigger confetti and toast
-      triggerConfetti();
+      // Trigger confetti only on first copy or random occurrence
+      if (shouldTriggerConfetti()) {
+        triggerConfetti();
+      }
+      
       toast.success('Copied to clipboard!', {
         description: 'Narrative text only',
       });
