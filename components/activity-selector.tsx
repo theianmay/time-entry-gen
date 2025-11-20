@@ -3,6 +3,7 @@
 import { ACTIVITIES } from '@/lib/constants';
 import { ActivityType } from '@/types';
 import { Card } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import * as Icons from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -14,30 +15,32 @@ interface ActivitySelectorProps {
 
 export function ActivitySelector({ value, onChange }: ActivitySelectorProps) {
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <label className="text-base font-semibold leading-none">
-          Activity Type
-        </label>
-        <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
-          Required
-        </span>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+    <TooltipProvider delayDuration={200}>
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <label className="text-base font-semibold leading-none">
+            Activity Type
+          </label>
+          <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
+            Required
+          </span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {ACTIVITIES.map((activity, index) => {
           const Icon = Icons[activity.icon as keyof typeof Icons] as React.ComponentType<{ className?: string }>;
           const isSelected = value === activity.id;
 
           return (
-            <motion.div
-              key={activity.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.05, duration: 0.3 }}
-              whileHover={{ scale: 1.05, y: -4 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Card
+            <Tooltip key={activity.id}>
+              <TooltipTrigger asChild>
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  whileHover={{ scale: 1.05, y: -4 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Card
                 className={cn(
                   'relative cursor-pointer transition-all duration-300',
                   'p-4 flex flex-col items-center text-center gap-2 overflow-hidden',
@@ -89,15 +92,21 @@ export function ActivitySelector({ value, onChange }: ActivitySelectorProps) {
                   >
                     {activity.label}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {activity.description}
-                  </p>
                 </div>
-              </Card>
-            </motion.div>
+                  </Card>
+                </motion.div>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="max-w-xs">
+                <p className="font-medium">{activity.label}</p>
+                <p className="text-xs text-primary-foreground/80 mt-0.5">
+                  {activity.description}
+                </p>
+              </TooltipContent>
+            </Tooltip>
           );
         })}
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { ActivitySelector } from './activity-selector';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -19,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2, User, Target, Clock, Briefcase, Sparkles } from 'lucide-react';
+import { Loader2, User, Target, Clock, Briefcase, Sparkles, HelpCircle } from 'lucide-react';
 import { FormData as FormDataType } from '@/types';
 
 // Zod schema for form validation
@@ -62,18 +63,19 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
   };
 
   return (
-    <Card className="border-2 shadow-lg">
-      <CardHeader>
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-purple-500" />
-          <CardTitle className="text-xl">Create Time Entry</CardTitle>
-        </div>
-        <CardDescription>
-          Fill in the details below to generate a polished billing narrative
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
+    <TooltipProvider delayDuration={300}>
+      <Card className="border-2 shadow-lg">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-purple-500" />
+            <CardTitle className="text-xl">Create Time Entry</CardTitle>
+          </div>
+          <CardDescription>
+            Fill in the details below to generate a polished billing narrative
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             {/* Activity Selection */}
             <FormField
@@ -115,6 +117,14 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                     <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
                       Required
                     </span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-xs">
+                        <p className="text-xs">Who or what was involved? Examples: "Founder", "Series A Term Sheet", "Co-counsel"</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <FormControl>
                     <Input
@@ -123,9 +133,6 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Who or what was the focus of this activity?
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -144,6 +151,14 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                     <span className="inline-flex items-center rounded-full bg-destructive/10 px-2 py-0.5 text-xs font-medium text-destructive ring-1 ring-inset ring-destructive/20">
                       Required
                     </span>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <HelpCircle className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="max-w-xs">
+                        <p className="text-xs">What was the objective? Examples: "discuss funding structure", "identify control provisions"</p>
+                      </TooltipContent>
+                    </Tooltip>
                   </div>
                   <FormControl>
                     <Textarea
@@ -154,9 +169,6 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    What was the purpose or goal of this activity?
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -196,9 +208,6 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                       </span>
                     </div>
                   </FormControl>
-                  <FormDescription>
-                    Enter time in 0.1-hour increments (6-minute blocks)
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -225,9 +234,6 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
-                    Client name or matter reference for your records
-                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -255,5 +261,6 @@ export function EntryForm({ onSubmit, isGenerating }: EntryFormProps) {
         </Form>
       </CardContent>
     </Card>
+    </TooltipProvider>
   );
 }
