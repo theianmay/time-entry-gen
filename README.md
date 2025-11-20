@@ -12,10 +12,14 @@ TimeCraft is a Next.js application that transforms raw time entries into profess
 
 - 🤖 **AI-Powered Generation** - Uses OpenAI GPT-4o-mini for polished narratives
 - 🔄 **Automatic Fallback** - Rule-based transformation when API unavailable
-- 📜 **Session History** - Track all generated entries in current session
+- 📜 **Session History** - Track all generated entries (session-only, doesn't persist)
 - 🎨 **Dark Mode** - Beautiful UI with light/dark theme toggle
 - ✅ **Smart Validation** - Progressive disclosure with Zod validation
-- 📋 **Copy to Clipboard** - One-click copy with time duration
+- 📋 **Copy to Clipboard** - One-click copy with confetti celebration
+- 🎯 **Format Customization** - Choose numbered, bullets, hyphens, or plain text
+- 🎭 **Smooth Animations** - Polished transitions with Framer Motion
+- 🔔 **Toast Notifications** - Beautiful feedback for all actions
+- 💡 **Helpful Tooltips** - Contextual help throughout the interface
 - ⚡ **Rate Limiting** - Built-in cost controls and abuse prevention
 - ♿ **Accessible** - WCAG AA compliant, keyboard navigable
 - 📱 **Responsive** - Works on desktop, tablet, and mobile
@@ -81,14 +85,23 @@ Choose from 7 activity types:
 - **Subject/Who/What**: Who or what was involved (e.g., "Founder", "Term Sheet")
 - **Goal/Purpose**: What was the objective (e.g., "discuss funding structure")
 - **Time Duration** (Optional): Time in 0.1 hour increments
+- **Client/Matter** (Optional): Client and matter information
+- **Output Format** (Optional): Choose numbered (default), bullets, hyphens, or plain text
 
 ### 3. Generate
 Click "Generate Billing Narrative" and get a professional output like:
 
 > "Telephone conference with Founder regarding Series A funding structure to determine optimal capitalization strategy and liquidation preferences."
 
-### 4. Copy & Use
-Click "Copy to Clipboard" and paste into your billing system.
+### 4. Customize Format (Optional)
+Toggle between different formats after generation:
+- **Numbered** (1. 2. 3.) - Default
+- **Bullets** (• • •)
+- **Hyphens** (- - -)
+- **None** (Plain text)
+
+### 5. Copy & Use
+Click "Copy to Clipboard" (with confetti celebration!) and paste into your billing system.
 
 ---
 
@@ -133,6 +146,10 @@ See [docs/api-controls.md](docs/api-controls.md) for details.
 - **Styling**: TailwindCSS v4 + shadcn/ui
 - **Forms**: React Hook Form + Zod
 - **AI**: OpenAI GPT-4o-mini
+- **Animations**: Framer Motion
+- **Notifications**: Sonner (toast notifications)
+- **Celebrations**: Canvas Confetti
+- **Tooltips**: Radix UI Tooltip
 - **Icons**: Lucide React
 - **Theme**: next-themes
 
@@ -148,9 +165,17 @@ time-entry-gen/
 │   └── globals.css        # Global styles
 ├── components/            # React components
 │   ├── ui/               # shadcn/ui components
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── input.tsx
+│   │   ├── textarea.tsx
+│   │   ├── select.tsx
+│   │   ├── tooltip.tsx
+│   │   └── skeleton.tsx
 │   ├── activity-selector.tsx
 │   ├── entry-form.tsx
 │   ├── output-display.tsx
+│   ├── output-skeleton.tsx
 │   ├── session-history.tsx
 │   └── theme-toggle.tsx
 ├── lib/                   # Utilities and logic
@@ -258,6 +283,6 @@ For issues or questions, please open an issue on GitHub.
 
 ---
 
-**Status:** ✅ MVP Complete - Production Ready  
+**Status:** ✅ Portfolio Ready - Phase 6 UI/UX Polish Complete  
 **Version:** 0.1.0  
-**Last Updated:** November 2025
+**Last Updated:** November 20, 2025
