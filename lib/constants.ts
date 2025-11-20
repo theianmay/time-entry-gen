@@ -36,7 +36,7 @@ export const ACTIVITIES: Activity[] = [
   },
   {
     id: 'email',
-    label: 'Email/Correspondence',
+    label: 'Correspondence',
     icon: 'Mail',
     description: 'Email or written correspondence',
     color: 'cyan',
