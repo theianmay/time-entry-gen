@@ -205,9 +205,9 @@ export function OutputDisplay({ output, time, clientMatter, format: initialForma
         )}
 
         {/* Format Toggle Buttons */}
-        <div className="flex items-center gap-2 pb-2 border-b">
-          <span className="text-sm font-medium text-muted-foreground">Format:</span>
-          <div className="flex gap-1">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 pb-2 border-b">
+          <span className="text-sm font-medium text-muted-foreground shrink-0">Format:</span>
+          <div className="flex flex-wrap gap-1">
             {FORMAT_OPTIONS.map((option) => {
               const Icon = option.icon;
               const isActive = currentFormat === option.value;
@@ -218,11 +218,11 @@ export function OutputDisplay({ output, time, clientMatter, format: initialForma
                   size="sm"
                   onClick={() => setCurrentFormat(option.value)}
                   className={cn(
-                    'h-8 px-3 transition-all',
+                    'h-8 px-2 sm:px-3 transition-all',
                     isActive && 'shadow-md'
                   )}
                 >
-                  <Icon className="h-3.5 w-3.5 mr-1.5" />
+                  <Icon className="h-3.5 w-3.5 mr-1 sm:mr-1.5" />
                   <span className="text-xs">{option.label}</span>
                 </Button>
               );
@@ -255,7 +255,7 @@ export function OutputDisplay({ output, time, clientMatter, format: initialForma
         )}
 
         <div className="flex flex-col gap-2">
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               onClick={handleCopyFull}
               variant="default"
@@ -266,12 +266,14 @@ export function OutputDisplay({ output, time, clientMatter, format: initialForma
               {copiedFull ? (
                 <>
                   <Check className="mr-2 h-4 w-4" />
-                  Copied All!
+                  <span className="hidden sm:inline">Copied All!</span>
+                  <span className="sm:hidden">Copied!</span>
                 </>
               ) : (
                 <>
                   <Copy className="mr-2 h-4 w-4" />
-                  Copy All (with details)
+                  <span className="hidden sm:inline">Copy All (with details)</span>
+                  <span className="sm:hidden">Copy All</span>
                 </>
               )}
             </Button>
@@ -290,7 +292,8 @@ export function OutputDisplay({ output, time, clientMatter, format: initialForma
               ) : (
                 <>
                   <Copy className="mr-2 h-4 w-4" />
-                  Copy Narrative Only
+                  <span className="hidden sm:inline">Copy Narrative Only</span>
+                  <span className="sm:hidden">Copy Narrative</span>
                 </>
               )}
             </Button>
